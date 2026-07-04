@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter & Validator – Free, with Exact Error Location | DevLens</title>
+<meta name="description" content="Free online JSON formatter, beautifier, minifier, and validator. Get the exact line and column of syntax errors, with syntax-highlighted output. Nothing is uploaded.">
+<link rel="canonical" href="https://devlens.dev/json-formatter.html">
+<meta property="og:title" content="JSON Formatter & Validator – DevLens">
+<meta property="og:description" content="Format, minify, and validate JSON with exact error locations. Free and private.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DevLens JSON Formatter & Validator",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in browser)",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "description": "Free browser-based JSON formatter, minifier, and validator with exact error line/column reporting."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Why does my JSON key order change after formatting?",
+     "acceptedAnswer":{"@type":"Answer","text":"If your object has keys that look like integers (e.g. \"1\", \"2\"), JavaScript automatically reorders those keys numerically ahead of other keys. This is standard JavaScript object behavior, not a bug specific to this tool, and it affects any formatter built on JSON.parse."}},
+    {"@type":"Question","name":"How is the error location calculated?",
+     "acceptedAnswer":{"@type":"Answer","text":"DevLens uses its own lightweight JSON scanner to walk the text and find the exact line and column of the first structural problem, rather than relying on the browser's built-in error message, which varies in format between Chrome, Firefox, and Safari."}}
+  ]
+}
+</script>
+<style>
+  :root{
+    --paper:#F4F7FA; --paper-light:#FFFFFF; --ink:#12233D; --ink-soft:#3D546E;
+    --blue:#2B6CB0; --amber:#D97706; --green:#15803D; --red:#B91C1C;
+    --graphite:#6B7684; --border:rgba(18,35,61,0.14);
+    --mono:'JetBrains Mono','Courier New',monospace;
+    --sans:'Inter',-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;color:var(--ink);font-family:var(--sans);line-height:1.55;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(rgba(43,108,176,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43,108,176,0.06) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 24px;}
+
+  header.site{border-bottom:1px solid var(--border);background:rgba(244,247,250,0.92);backdrop-filter:blur(6px);position:sticky;top:0;z-index:50;}
+  .site-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0;}
+  .brand{font-family:var(--mono);font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--ink);}
+  .brand span{color:var(--blue);}
+  nav.tools-nav{display:flex;gap:24px;font-family:var(--mono);font-size:0.76rem;}
+  nav.tools-nav a{text-decoration:none;color:var(--ink-soft);}
+  nav.tools-nav a:hover{color:var(--blue);}
+  nav.tools-nav a.active{color:var(--blue);}
+
+  .page-head{padding:38px 0 6px;}
+  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-size:0.76rem;color:var(--blue);margin-bottom:10px;}
+  h1{font-family:var(--mono);font-size:clamp(1.7rem,3.4vw,2.3rem);font-weight:700;margin:0 0 10px;}
+  .lede{color:var(--ink-soft);max-width:70ch;margin:0 0 24px;}
+
+  .panel{background:var(--paper-light);border:1px solid var(--border);border-radius:4px;position:relative;}
+  .panel::before, .panel::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--blue);}
+  .panel::before{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid;}
+  .panel::after{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid;}
+
+  .toolbar-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .toolbar-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  select, .btn{font-family:var(--mono);font-size:0.78rem;}
+  select{padding:8px 10px;border:1px solid var(--border);border-radius:3px;background:var(--paper-light);color:var(--ink);}
+  .btn{padding:9px 14px;border-radius:3px;border:1px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer;text-transform:uppercase;letter-spacing:0.02em;}
+  .btn:hover{background:var(--blue);color:#fff;}
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-primary:hover{background:#235a92;}
+
+  .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding-bottom:8px;}
+  .col-panel{padding:18px;}
+  .col-label{font-family:var(--mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--graphite);margin-bottom:10px;display:flex;justify-content:space-between;}
+  textarea#inputBox{
+    width:100%;min-height:420px;border:none;outline:none;resize:vertical;
+    font-family:var(--mono);font-size:0.88rem;color:var(--ink);line-height:1.6;background:transparent;
+  }
+  #outputBox{
+    min-height:420px;font-family:var(--mono);font-size:0.88rem;line-height:1.6;
+    white-space:pre-wrap;word-break:break-word;overflow-x:auto;color:var(--ink);
+  }
+  #outputBox .key{color:var(--blue);font-weight:600;}
+  #outputBox .str{color:var(--green);}
+  #outputBox .num{color:var(--amber);}
+  #outputBox .bool{color:#7c3aed;}
+  #outputBox .null{color:var(--graphite);font-style:italic;}
+  .placeholder{color:var(--graphite);font-style:italic;}
+
+  .status-banner{
+    display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:4px;
+    font-family:var(--mono);font-size:0.85rem;margin-bottom:16px;
+  }
+  .status-banner.valid{background:rgba(21,128,61,0.08);color:var(--green);border:1px solid rgba(21,128,61,0.25);}
+  .status-banner.invalid{background:rgba(185,28,28,0.07);color:var(--red);border:1px solid rgba(185,28,28,0.25);}
+  .status-banner.idle{background:var(--paper);color:var(--graphite);border:1px solid var(--border);}
+  .status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .status-banner.valid .status-dot{background:var(--green);}
+  .status-banner.invalid .status-dot{background:var(--red);}
+  .status-banner.idle .status-dot{background:var(--graphite);}
+
+  .stat-rail{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 8px;font-family:var(--mono);font-size:0.8rem;color:var(--ink-soft);}
+  .stat-rail b{color:var(--ink);}
+
+  section.explain{padding:48px 0 56px;}
+  .section-head h2{font-family:var(--mono);font-size:1.4rem;font-weight:700;margin:0 0 10px;}
+  .section-head p{color:var(--ink-soft);max-width:70ch;}
+
+  .faq{padding:8px 0 72px;}
+  details{border-bottom:1px solid var(--border);padding:16px 0;}
+  summary{font-family:var(--mono);font-size:1rem;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;}
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:'+';color:var(--blue);font-size:1.2rem;}
+  details[open] summary::after{content:'–';}
+  details p{color:var(--ink-soft);margin:10px 0 0;max-width:66ch;font-size:0.94rem;}
+
+  footer{border-top:1px solid var(--border);padding:26px 0;font-family:var(--mono);font-size:0.8rem;color:var(--graphite);background:rgba(244,247,250,0.92);}
+  footer .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  footer a{text-decoration:none;color:var(--ink-soft);margin-right:16px;}
+  footer a:hover{color:var(--blue);}
+
+  @media(max-width:900px){
+    .work-grid{grid-template-columns:1fr;}
+    nav.tools-nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-nav">
+    <a href="/" class="brand">Dev<span>Lens</span></a>
+    <nav class="tools-nav">
+      <a href="/json-formatter.html" class="active">JSON Formatter</a>
+      <a href="/jwt-decoder.html">JWT Decoder</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap page-head">
+    <div class="eyebrow">Tool 01 · Format &amp; Validate</div>
+    <h1>JSON Formatter &amp; Validator</h1>
+    <p class="lede">Paste JSON on the left. It's validated as you type, with the exact line and column of the first syntax error if something's wrong — plus a beautified, syntax-highlighted, copyable result on the right.</p>
+  </div>
+
+  <div class="wrap">
+    <div id="statusBanner" class="status-banner idle">
+      <span class="status-dot"></span>
+      <span id="statusText">Paste JSON to validate it.</span>
+    </div>
+
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        <select id="indentSelect">
+          <option value="2">Indent: 2 spaces</option>
+          <option value="4">Indent: 4 spaces</option>
+          <option value="tab">Indent: Tab</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <button class="btn" id="sampleBtn" type="button">Load sample</button>
+        <button class="btn" id="minifyBtn" type="button">Minify</button>
+        <button class="btn" id="clearBtn" type="button">Clear</button>
+        <button class="btn btn-primary" id="copyBtn" type="button">Copy output</button>
+        <button class="btn btn-primary" id="downloadBtn" type="button">Download .json</button>
+      </div>
+    </div>
+
+    <div class="work-grid">
+      <div class="panel col-panel">
+        <div class="col-label"><span>Input</span><span id="inputSize">0 chars</span></div>
+        <textarea id="inputBox" placeholder='{"paste": "your JSON here"}' spellcheck="false"></textarea>
+      </div>
+      <div class="panel col-panel">
+        <div class="col-label"><span>Formatted output</span><span id="outputSize">0 chars</span></div>
+        <div id="outputBox"><span class="placeholder">Formatted, highlighted JSON will appear here.</span></div>
+      </div>
+    </div>
+
+    <div class="stat-rail" id="statRail" style="display:none;">
+      <span>Keys: <b id="statKeys">0</b></span>
+      <span>Max depth: <b id="statDepth">0</b></span>
+      <span>Size change: <b id="statSize">—</b></span>
+    </div>
+  </div>
+
+  <section class="explain wrap">
+    <div class="section-head">
+      <h2>How the error location works</h2>
+      <p>Rather than parsing the browser's built-in error message — which is worded differently in Chrome, Firefox, and Safari, and doesn't always include a position at all in newer versions — DevLens runs its own lightweight scanner over your text to find the exact line and column of the first structural problem. Validity itself is still confirmed with the browser's native JSON parser; the scanner is only used to locate where things went wrong.</p>
+    </div>
+  </section>
+
+  <section class="faq wrap">
+    <div class="section-head"><h2>Frequently asked questions</h2></div>
+    <details open>
+      <summary>Why does my JSON key order change after formatting?</summary>
+      <p>If your object has keys that look like integers (e.g. "1", "2"), JavaScript automatically reorders those keys numerically ahead of other keys. This is standard JavaScript object behavior, not a bug specific to this tool — it affects any formatter built on JSON.parse, which is nearly all of them. Regular string keys (like "name" or "email") always keep their original order.</p>
+    </details>
+    <details>
+      <summary>Is there a size limit?</summary>
+      <p>No hard limit — formatting and minifying use the browser's native JSON parser, which handles large documents well. Very large outputs may take slightly longer to syntax-highlight since each token is individually styled.</p>
+    </details>
+    <details>
+      <summary>Does minify remove comments?</summary>
+      <p>Standard JSON doesn't support comments, so if your input has any (as in JSONC or JSON5), it won't parse as valid JSON in the first place. Strip comments before pasting if your source uses one of those relaxed formats.</p>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy Policy</a></div>
+    <div>© <span id="yr"></span> DevLens. Nothing you paste ever leaves your browser.</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ---------- custom position-tracking JSON scanner (tested standalone before integration) ---------- */
+function locateJSONError(text){
+  let i = 0, line = 1, col = 1;
+  const len = text.length;
+  function advance(){ if(text[i] === '\n'){ line++; col = 1; } else { col++; } i++; }
+  function fail(msg){ const e = new Error(msg); e.line = line; e.col = col; e.pos = i; throw e; }
+  function skipWs(){ while(i < len && /\s/.test(text[i])) advance(); }
+  function parseValue(){
+    skipWs();
+    if(i >= len) fail('Unexpected end of input');
+    const c = text[i];
+    if(c === '{') return parseObject();
+    if(c === '[') return parseArray();
+    if(c === '"') return parseString();
+    if(c === '-' || (c >= '0' && c <= '9')) return parseNumber();
+    if(text.startsWith('true', i)){ for(let k=0;k<4;k++) advance(); return; }
+    if(text.startsWith('false', i)){ for(let k=0;k<5;k++) advance(); return; }
+    if(text.startsWith('null', i)){ for(let k=0;k<4;k++) advance(); return; }
+    fail(`Unexpected token '${c}'`);
+  }
+  function parseObject(){
+    advance(); skipWs();
+    if(text[i] === '}'){ advance(); return; }
+    while(true){
+      skipWs();
+      if(text[i] !== '"') fail(`Expected string key, got '${text[i] === undefined ? 'end of input' : text[i]}'`);
+      parseString(); skipWs();
+      if(text[i] !== ':') fail(`Expected ':', got '${text[i] === undefined ? 'end of input' : text[i]}'`);
+      advance(); parseValue(); skipWs();
+      if(text[i] === ','){ advance(); skipWs(); if(text[i] === '}') fail(`Trailing comma before '}'`); continue; }
+      if(text[i] === '}'){ advance(); return; }
+      fail(`Expected ',' or '}', got '${text[i] === undefined ? 'end of input' : text[i]}'`);
+    }
+  }
+  function parseArray(){
+    advance(); skipWs();
+    if(text[i] === ']'){ advance(); return; }
+    while(true){
+      parseValue(); skipWs();
+      if(text[i] === ','){ advance(); skipWs(); if(text[i] === ']') fail(`Trailing comma before ']'`); continue; }
+      if(text[i] === ']'){ advance(); return; }
+      fail(`Expected ',' or ']', got '${text[i] === undefined ? 'end of input' : text[i]}'`);
+    }
+  }
+  function parseString(){
+    advance();
+    while(i < len && text[i] !== '"'){ if(text[i] === '\\'){ advance(); if(i<len) advance(); } else advance(); }
+    if(i >= len) fail('Unterminated string');
+    advance();
+  }
+  function parseNumber(){
+    if(text[i] === '-') advance();
+    if(text[i] === '0'){ advance(); }
+    else { if(!/[1-9]/.test(text[i]||'')) fail('Invalid number'); while(/[0-9]/.test(text[i]||'')) advance(); }
+    if(text[i] === '.'){ advance(); if(!/[0-9]/.test(text[i]||'')) fail('Invalid number: expected digit after decimal point'); while(/[0-9]/.test(text[i]||'')) advance(); }
+    if(text[i] === 'e' || text[i] === 'E'){ advance(); if(text[i]==='+'||text[i]==='-') advance(); if(!/[0-9]/.test(text[i]||'')) fail('Invalid number: expected digit in exponent'); while(/[0-9]/.test(text[i]||'')) advance(); }
+  }
+  try{
+    parseValue(); skipWs();
+    if(i < len) fail(`Unexpected trailing content '${text[i]}'`);
+    return null;
+  }catch(e){
+    return {message: e.message, line: e.line, col: e.col, pos: e.pos};
+  }
+}
+
+/* ---------- highlighter (operates on already-formatted JSON.stringify output) ---------- */
+function highlightJSON(jsonString){
+  let s = jsonString.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return s.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g, (match) => {
+    let cls = 'num';
+    if(/^"/.test(match)) cls = /:\s*$/.test(match) ? 'key' : 'str';
+    else if(/true|false/.test(match)) cls = 'bool';
+    else if(/null/.test(match)) cls = 'null';
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+/* ---------- stats ---------- */
+function analyzeStructure(value, depth){
+  depth = depth || 1;
+  let keys = 0, maxDepth = depth;
+  if(Array.isArray(value)){
+    value.forEach(v => {
+      if(v && typeof v === 'object'){
+        const r = analyzeStructure(v, depth+1);
+        keys += r.keys; maxDepth = Math.max(maxDepth, r.maxDepth);
+      }
+    });
+  } else if(value && typeof value === 'object'){
+    const ks = Object.keys(value);
+    keys += ks.length;
+    ks.forEach(k => {
+      const v = value[k];
+      if(v && typeof v === 'object'){
+        const r = analyzeStructure(v, depth+1);
+        keys += r.keys; maxDepth = Math.max(maxDepth, r.maxDepth);
+      }
+    });
+  }
+  return {keys, maxDepth};
+}
+
+/* ---------- wiring ---------- */
+const inputBox = document.getElementById('inputBox');
+const outputBox = document.getElementById('outputBox');
+const statusBanner = document.getElementById('statusBanner');
+const statusText = document.getElementById('statusText');
+const statRail = document.getElementById('statRail');
+let lastValidParsed = null;
+let lastFormatted = '';
+
+function currentIndent(){
+  const v = document.getElementById('indentSelect').value;
+  return v === 'tab' ? '\t' : parseInt(v, 10);
+}
+
+function setStatus(kind, text){
+  statusBanner.className = 'status-banner ' + kind;
+  statusText.textContent = text;
+}
+
+function update(){
+  const text = inputBox.value;
+  document.getElementById('inputSize').textContent = text.length.toLocaleString() + ' chars';
+
+  if(!text.trim()){
+    setStatus('idle', 'Paste JSON to validate it.');
+    outputBox.innerHTML = '<span class="placeholder">Formatted, highlighted JSON will appear here.</span>';
+    document.getElementById('outputSize').textContent = '0 chars';
+    statRail.style.display = 'none';
+    lastValidParsed = null; lastFormatted = '';
+    return;
+  }
+
+  let parsed;
+  try{
+    parsed = JSON.parse(text);
+  }catch(e){
+    const loc = locateJSONError(text);
+    if(loc){
+      setStatus('invalid', `Invalid JSON — ${loc.message} at line ${loc.line}, column ${loc.col}.`);
+    } else {
+      setStatus('invalid', 'Invalid JSON — ' + e.message);
+    }
+    outputBox.innerHTML = '<span class="placeholder">Fix the error on the left to see formatted output.</span>';
+    document.getElementById('outputSize').textContent = '0 chars';
+    statRail.style.display = 'none';
+    lastValidParsed = null; lastFormatted = '';
+    return;
+  }
+
+  setStatus('valid', 'Valid JSON.');
+  const formatted = JSON.stringify(parsed, null, currentIndent());
+  lastValidParsed = parsed;
+  lastFormatted = formatted;
+  outputBox.innerHTML = highlightJSON(formatted);
+  document.getElementById('outputSize').textContent = formatted.length.toLocaleString() + ' chars';
+
+  const {keys, maxDepth} = analyzeStructure(parsed);
+  document.getElementById('statKeys').textContent = keys;
+  document.getElementById('statDepth').textContent = maxDepth;
+  const diff = formatted.length - text.length;
+  document.getElementById('statSize').textContent = (diff >= 0 ? '+' : '') + diff.toLocaleString() + ' chars vs input';
+  statRail.style.display = 'flex';
+}
+
+inputBox.addEventListener('input', update);
+document.getElementById('indentSelect').addEventListener('change', update);
+
+document.getElementById('minifyBtn').addEventListener('click', () => {
+  if(!lastValidParsed){ return; }
+  const minified = JSON.stringify(lastValidParsed);
+  inputBox.value = minified;
+  update();
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  inputBox.value = '';
+  update();
+  inputBox.focus();
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if(!lastFormatted) return;
+  navigator.clipboard.writeText(lastFormatted).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(() => btn.textContent = original, 1200);
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  if(!lastFormatted) return;
+  const blob = new Blob([lastFormatted], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'formatted.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('sampleBtn').addEventListener('click', () => {
+  inputBox.value = JSON.stringify({
+    id: 482913,
+    name: "Ada Lovelace",
+    active: true,
+    roles: ["admin", "editor"],
+    profile: {bio: "Mathematician & writer", verified: true, rating: 4.98},
+    lastLogin: null
+  });
+  update();
+});
+
+update();
+</script>
+</body>
+</html>
