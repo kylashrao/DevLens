@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevLens – Free JSON Formatter, Validator & JWT Decoder</title>
-<meta name="description" content="Free browser-based JSON formatter, validator, and JWT decoder for developers. Instant error locations, syntax highlighting, and claim inspection — nothing is ever uploaded.">
-<link rel="canonical" href="https://devlens.dev/">
-<meta property="og:title" content="DevLens – JSON Formatter, Validator & JWT Decoder">
-<meta property="og:description" content="Free, private developer tools: format/validate JSON with exact error locations, and decode JWTs with claim-level inspection.">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script type="application/ld+json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevLens – Free JSON Formatter, Validator & JWT Decoder</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2824959172169836"
+    crossorigin="anonymous"></script>
+  <meta name="description"
+    content="Free browser-based JSON formatter, validator, and JWT decoder for developers. Instant error locations, syntax highlighting, and claim inspection — nothing is ever uploaded.">
+  <link rel="canonical" href="https://devlens.dev/">
+  <meta property="og:title" content="DevLens – JSON Formatter, Validator & JWT Decoder">
+  <meta property="og:description"
+    content="Free, private developer tools: format/validate JSON with exact error locations, and decode JWTs with claim-level inspection.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -21,181 +28,479 @@
   "description": "Free browser-based JSON formatter, validator, and JWT decoder for developers."
 }
 </script>
-<style>
-  :root{
-    --paper:#F4F7FA; --paper-light:#FFFFFF; --ink:#12233D; --ink-soft:#3D546E;
-    --blue:#2B6CB0; --amber:#D97706; --green:#15803D; --red:#B91C1C;
-    --graphite:#6B7684; --border:rgba(18,35,61,0.14);
-    --mono:'JetBrains Mono','Courier New',monospace;
-    --sans:'Inter',-apple-system,sans-serif;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;color:var(--ink);font-family:var(--sans);line-height:1.55;
-    background-color:var(--paper);
-    background-image:
-      linear-gradient(rgba(43,108,176,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(43,108,176,0.06) 1px, transparent 1px);
-    background-size:28px 28px;
-  }
-  a{color:inherit;}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  <style>
+    :root {
+      --paper: #F4F7FA;
+      --paper-light: #FFFFFF;
+      --ink: #12233D;
+      --ink-soft: #3D546E;
+      --blue: #2B6CB0;
+      --amber: #D97706;
+      --green: #15803D;
+      --red: #B91C1C;
+      --graphite: #6B7684;
+      --border: rgba(18, 35, 61, 0.14);
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+      --sans: 'Inter', -apple-system, sans-serif;
+    }
 
-  header.site{border-bottom:1px solid var(--border);background:rgba(244,247,250,0.92);backdrop-filter:blur(6px);position:sticky;top:0;z-index:50;}
-  .site-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
-  .brand{font-family:var(--mono);font-weight:700;font-size:1.3rem;letter-spacing:-0.01em;text-decoration:none;color:var(--ink);}
-  .brand span{color:var(--blue);}
-  nav.tools-nav{display:flex;gap:26px;font-family:var(--mono);font-size:0.78rem;letter-spacing:0.02em;}
-  nav.tools-nav a{text-decoration:none;color:var(--ink-soft);}
-  nav.tools-nav a:hover{color:var(--blue);}
+    * {
+      box-sizing: border-box;
+    }
 
-  .hero{padding:72px 0 48px;}
-  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-size:0.76rem;color:var(--blue);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-  .eyebrow::before{content:'';width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block;}
-  h1{font-family:var(--mono);font-size:clamp(1.9rem,4vw,2.9rem);font-weight:700;line-height:1.15;margin:0 0 18px;max-width:20ch;letter-spacing:-0.01em;}
-  .lede{font-size:1.05rem;color:var(--ink-soft);max-width:60ch;margin:0 0 32px;}
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(43, 108, 176, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(43, 108, 176, 0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
 
-  .panel{
-    background:var(--paper-light);border:1px solid var(--border);border-radius:4px;
-    position:relative;
-  }
-  .panel::before, .panel::after{
-    content:'';position:absolute;width:14px;height:14px;border-color:var(--blue);
-  }
-  .panel::before{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid;}
-  .panel::after{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid;}
+    a {
+      color: inherit;
+    }
 
-  .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:8px 0 56px;}
-  .tool-card{padding:28px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:12px;transition:transform .15s ease;}
-  .tool-card:hover{transform:translateY(-3px);}
-  .tool-card .tag{font-family:var(--mono);font-size:0.72rem;color:var(--blue);text-transform:uppercase;letter-spacing:0.05em;}
-  .tool-card h2{font-family:var(--mono);font-size:1.35rem;font-weight:700;margin:0;}
-  .tool-card p{margin:0;color:var(--ink-soft);font-size:0.95rem;}
-  .tool-card .go{font-family:var(--mono);font-size:0.82rem;color:var(--blue);margin-top:auto;}
-  .tool-card .mock{
-    background:var(--ink);color:#d9e8f5;border-radius:3px;padding:12px 14px;
-    font-family:var(--mono);font-size:0.78rem;line-height:1.6;overflow:hidden;
-  }
-  .mock .k{color:#7cc4ff;} .mock .s{color:#a7e3a0;} .mock .n{color:#f0b968;}
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-  section.features{padding:12px 0 56px;}
-  .section-head{margin-bottom:30px;max-width:60ch;}
-  .section-head h2{font-family:var(--mono);font-size:1.5rem;font-weight:700;margin:0 0 8px;}
-  .section-head p{color:var(--ink-soft);margin:0;}
-  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .feat{background:var(--paper-light);border:1px solid var(--border);border-radius:4px;padding:22px;}
-  .feat .num{font-family:var(--mono);font-size:0.72rem;color:var(--blue);}
-  .feat h3{font-family:var(--mono);font-size:1.05rem;margin:8px 0 8px;}
-  .feat p{margin:0;color:var(--ink-soft);font-size:0.9rem;}
+    header.site {
+      border-bottom: 1px solid var(--border);
+      background: rgba(244, 247, 250, 0.92);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
 
-  section.faq{padding:16px 0 76px;}
-  details{border-bottom:1px solid var(--border);padding:16px 0;}
-  summary{font-family:var(--mono);font-size:1rem;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;}
-  summary::-webkit-details-marker{display:none;}
-  summary::after{content:'+';color:var(--blue);font-size:1.2rem;}
-  details[open] summary::after{content:'–';}
-  details p{color:var(--ink-soft);margin:10px 0 0;max-width:66ch;font-size:0.94rem;}
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+    }
 
-  footer{border-top:1px solid var(--border);padding:28px 0;font-family:var(--mono);font-size:0.8rem;color:var(--graphite);background:rgba(244,247,250,0.92);}
-  footer .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-  footer a{text-decoration:none;color:var(--ink-soft);margin-right:16px;}
-  footer a:hover{color:var(--blue);}
+    .brand {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      color: var(--ink);
+    }
 
-  @media(max-width:820px){
-    .tool-grid{grid-template-columns:1fr;}
-    .feat-grid{grid-template-columns:1fr;}
-    nav.tools-nav{display:none;}
-  }
-</style>
+    .brand span {
+      color: var(--blue);
+    }
+
+    nav.tools-nav {
+      display: flex;
+      gap: 26px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+    }
+
+    nav.tools-nav a {
+      text-decoration: none;
+      color: var(--ink-soft);
+    }
+
+    nav.tools-nav a:hover {
+      color: var(--blue);
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.76rem;
+      color: var(--blue);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-size: clamp(1.9rem, 4vw, 2.9rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 18px;
+      max-width: 20ch;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 60ch;
+      margin: 0 0 32px;
+    }
+
+    .panel {
+      background: var(--paper-light);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .panel::before,
+    .panel::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: var(--blue);
+    }
+
+    .panel::before {
+      top: -1px;
+      left: -1px;
+      border-top: 2px solid;
+      border-left: 2px solid;
+    }
+
+    .panel::after {
+      bottom: -1px;
+      right: -1px;
+      border-bottom: 2px solid;
+      border-right: 2px solid;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      padding: 8px 0 56px;
+    }
+
+    .tool-card {
+      padding: 28px;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform .15s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .tool-card .tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tool-card h2 {
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .tool-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    .tool-card .go {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--blue);
+      margin-top: auto;
+    }
+
+    .tool-card .mock {
+      background: var(--ink);
+      color: #d9e8f5;
+      border-radius: 3px;
+      padding: 12px 14px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      overflow: hidden;
+    }
+
+    .mock .k {
+      color: #7cc4ff;
+    }
+
+    .mock .s {
+      color: #a7e3a0;
+    }
+
+    .mock .n {
+      color: #f0b968;
+    }
+
+    section.features {
+      padding: 12px 0 56px;
+    }
+
+    .section-head {
+      margin-bottom: 30px;
+      max-width: 60ch;
+    }
+
+    .section-head h2 {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .section-head p {
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feat {
+      background: var(--paper-light);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 22px;
+    }
+
+    .feat .num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--blue);
+    }
+
+    .feat h3 {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      margin: 8px 0 8px;
+    }
+
+    .feat p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    section.faq {
+      padding: 16px 0 76px;
+    }
+
+    details {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+
+    summary {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: '+';
+      color: var(--blue);
+      font-size: 1.2rem;
+    }
+
+    details[open] summary::after {
+      content: '–';
+    }
+
+    details p {
+      color: var(--ink-soft);
+      margin: 10px 0 0;
+      max-width: 66ch;
+      font-size: 0.94rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--graphite);
+      background: rgba(244, 247, 250, 0.92);
+    }
+
+    footer .foot-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: var(--ink-soft);
+      margin-right: 16px;
+    }
+
+    footer a:hover {
+      color: var(--blue);
+    }
+
+    @media(max-width:820px) {
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav.tools-nav {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="site">
-  <div class="wrap site-nav">
-    <a href="/" class="brand">Dev<span>Lens</span></a>
-    <nav class="tools-nav">
-      <a href="/json-formatter.html">JSON Formatter</a>
-      <a href="/jwt-decoder.html">JWT Decoder</a>
-      <a href="/about.html">About</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <section class="hero wrap">
-    <div class="eyebrow">Free · Private · Runs entirely client-side</div>
-    <h1>Inspect JSON and JWTs without leaving your browser tab.</h1>
-    <p class="lede">Two focused tools for developers: a JSON formatter and validator with exact error locations, and a JWT decoder that breaks down header, payload, and claim status. No sign-up, no server round-trip — your data is never uploaded.</p>
-  </section>
-
-  <div class="wrap tool-grid">
-    <a href="/json-formatter.html" class="panel tool-card">
-      <span class="tag">01 · Format &amp; Validate</span>
-      <h2>JSON Formatter</h2>
-      <p>Beautify, minify, and validate JSON with the exact line and column of any syntax error — not just a generic "invalid JSON" message.</p>
-      <div class="mock">{<br>&nbsp;&nbsp;<span class="k">"status"</span>: <span class="s">"ok"</span>,<br>&nbsp;&nbsp;<span class="k">"code"</span>: <span class="n">200</span><br>}</div>
-      <span class="go">Format JSON →</span>
-    </a>
-    <a href="/jwt-decoder.html" class="panel tool-card">
-      <span class="tag">02 · Decode &amp; Inspect</span>
-      <h2>JWT Decoder</h2>
-      <p>Paste a JSON Web Token to see its header and payload decoded, plus expiration status pulled straight from the exp claim.</p>
-      <div class="mock">alg: <span class="k">HS256</span><br>sub: <span class="s">"1234567890"</span><br>exp: <span class="n">1783098304</span> <span style="color:#f0b968;">(expired)</span></div>
-      <span class="go">Decode a token →</span>
-    </a>
-  </div>
-
-  <section class="features wrap">
-    <div class="section-head">
-      <h2>Why developers reach for DevLens</h2>
-      <p>Built to answer the two questions you actually have when staring at raw JSON or a JWT: "why won't this parse" and "what's actually inside this token."</p>
+  <header class="site">
+    <div class="wrap site-nav">
+      <a href="/" class="brand">Dev<span>Lens</span></a>
+      <nav class="tools-nav">
+        <a href="/json-formatter.html">JSON Formatter</a>
+        <a href="/jwt-decoder.html">JWT Decoder</a>
+        <a href="/about.html">About</a>
+      </nav>
     </div>
-    <div class="feat-grid">
-      <div class="feat">
-        <div class="num">01</div>
-        <h3>Exact error location</h3>
-        <p>The JSON validator points to the precise line and column of the first syntax problem, computed by an in-browser scanner rather than a browser-dependent error string.</p>
-      </div>
-      <div class="feat">
-        <div class="num">02</div>
-        <h3>Claim-aware JWT decoding</h3>
-        <p>Standard claims like exp, iat, and nbf are converted to readable timestamps, with expiration checked automatically against your local clock.</p>
-      </div>
-      <div class="feat">
-        <div class="num">03</div>
-        <h3>Nothing leaves your browser</h3>
-        <p>Both tools run entirely client-side. Pasting a production token or a customer payload here never sends that data to a server.</p>
-      </div>
-    </div>
-  </section>
+  </header>
 
-  <section class="faq wrap">
-    <div class="section-head"><h2>Common questions</h2></div>
-    <details open>
-      <summary>Is it safe to paste a real JWT or API response here?</summary>
-      <p>Yes — both tools run entirely in your browser's JavaScript engine. Nothing you paste is transmitted to a server, logged, or stored anywhere outside your own device.</p>
-    </details>
-    <details>
-      <summary>Can the JWT decoder verify a token's signature?</summary>
-      <p>No, and intentionally so. Verifying a signature requires the secret or public key used to sign the token, which this tool never asks for. It only decodes the header and payload so you can inspect the claims — it does not confirm the token is authentic or untampered.</p>
-    </details>
-    <details>
-      <summary>Does the JSON formatter handle very large files?</summary>
-      <p>Yes, formatting and minifying work well even on large JSON documents since they use the browser's native JSON parser. Syntax highlighting on extremely large outputs may take a moment longer since every token is individually styled.</p>
-    </details>
-  </section>
-</main>
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow">Free · Private · Runs entirely client-side</div>
+      <h1>Inspect JSON and JWTs without leaving your browser tab.</h1>
+      <p class="lede">Two focused tools for developers: a JSON formatter and validator with exact error locations, and a
+        JWT decoder that breaks down header, payload, and claim status. No sign-up, no server round-trip — your data is
+        never uploaded.</p>
+    </section>
 
-<footer>
-  <div class="wrap foot-row">
-    <div>
-      <a href="/about.html">About</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/privacy.html">Privacy Policy</a>
+    <div class="wrap tool-grid">
+      <a href="/json-formatter.html" class="panel tool-card">
+        <span class="tag">01 · Format &amp; Validate</span>
+        <h2>JSON Formatter</h2>
+        <p>Beautify, minify, and validate JSON with the exact line and column of any syntax error — not just a generic
+          "invalid JSON" message.</p>
+        <div class="mock">{<br>&nbsp;&nbsp;<span class="k">"status"</span>: <span
+            class="s">"ok"</span>,<br>&nbsp;&nbsp;<span class="k">"code"</span>: <span class="n">200</span><br>}</div>
+        <span class="go">Format JSON →</span>
+      </a>
+      <a href="/jwt-decoder.html" class="panel tool-card">
+        <span class="tag">02 · Decode &amp; Inspect</span>
+        <h2>JWT Decoder</h2>
+        <p>Paste a JSON Web Token to see its header and payload decoded, plus expiration status pulled straight from the
+          exp claim.</p>
+        <div class="mock">alg: <span class="k">HS256</span><br>sub: <span class="s">"1234567890"</span><br>exp: <span
+            class="n">1783098304</span> <span style="color:#f0b968;">(expired)</span></div>
+        <span class="go">Decode a token →</span>
+      </a>
     </div>
-    <div>© <span id="yr"></span> DevLens. Nothing you paste ever leaves your browser.</div>
-  </div>
-</footer>
-<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+    <section class="features wrap">
+      <div class="section-head">
+        <h2>Why developers reach for DevLens</h2>
+        <p>Built to answer the two questions you actually have when staring at raw JSON or a JWT: "why won't this parse"
+          and "what's actually inside this token."</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="num">01</div>
+          <h3>Exact error location</h3>
+          <p>The JSON validator points to the precise line and column of the first syntax problem, computed by an
+            in-browser scanner rather than a browser-dependent error string.</p>
+        </div>
+        <div class="feat">
+          <div class="num">02</div>
+          <h3>Claim-aware JWT decoding</h3>
+          <p>Standard claims like exp, iat, and nbf are converted to readable timestamps, with expiration checked
+            automatically against your local clock.</p>
+        </div>
+        <div class="feat">
+          <div class="num">03</div>
+          <h3>Nothing leaves your browser</h3>
+          <p>Both tools run entirely client-side. Pasting a production token or a customer payload here never sends that
+            data to a server.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq wrap">
+      <div class="section-head">
+        <h2>Common questions</h2>
+      </div>
+      <details open>
+        <summary>Is it safe to paste a real JWT or API response here?</summary>
+        <p>Yes — both tools run entirely in your browser's JavaScript engine. Nothing you paste is transmitted to a
+          server, logged, or stored anywhere outside your own device.</p>
+      </details>
+      <details>
+        <summary>Can the JWT decoder verify a token's signature?</summary>
+        <p>No, and intentionally so. Verifying a signature requires the secret or public key used to sign the token,
+          which this tool never asks for. It only decodes the header and payload so you can inspect the claims — it does
+          not confirm the token is authentic or untampered.</p>
+      </details>
+      <details>
+        <summary>Does the JSON formatter handle very large files?</summary>
+        <p>Yes, formatting and minifying work well even on large JSON documents since they use the browser's native JSON
+          parser. Syntax highlighting on extremely large outputs may take a moment longer since every token is
+          individually styled.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot-row">
+      <div>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+      <div>© <span id="yr"></span> DevLens. Nothing you paste ever leaves your browser.</div>
+    </div>
+  </footer>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
 </body>
+
 </html>
